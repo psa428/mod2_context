@@ -7,13 +7,13 @@
     },
     {
       "title": "Подвиг ",
-      "completed": false,
+      "completed": "false",
       "id": "9f74"
     },
     {
-      "id": "3333",
-      "title": "Война с Англией",
-      "completed": false
+      "title": "Война с Англиейй",
+      "completed": false,
+      "id": "3333"
     }
   ]
 }
