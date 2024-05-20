@@ -9,6 +9,9 @@ function App() {
   const [isUpdating, setIsUpdating] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [strSearch, setStrSearch] = useState('');
+  const [idRec, setIdRec] = useState('');
+
+  const [title, setTitle] = useState("");
 
   
 
@@ -25,7 +28,7 @@ function App() {
     }, [refreshRecords]);
 
     const requestAddRecord = () => {
-      let  newRecord = prompt("Введите наименование дела");
+      let  newRecord = title;
       if (!newRecord) 
         return;
 
@@ -48,12 +51,12 @@ function App() {
   };
   
   const requestUpdateRecord = () => {
-    let idRec = prompt('ВВедите id записи');
+    
     if (!idRec)
       return;
 
-       let newTitle = prompt('Наименование дела' );
-       let newStat = prompt('Статус' );
+    let newTitle = title;
+    let newStat = false;
     setIsUpdating(true);
 
     fetch('http://localhost:3005/records/' + idRec, {
@@ -69,16 +72,22 @@ function App() {
             console.log('Запись обновлена, ответ сервера:', response);
             setRefreshRecords(!refreshRecords);
         })
-        .finally(() => setIsUpdating(false));
+        .finally(() => {
+          setIsUpdating(false);
+          setTitle('');
+        }  
+
+        );
 };
 
-const requestDeleteRecord = () => {
-  let idRec = prompt('ВВедите id записи');
-    if (!idRec)
+const requestDeleteRecord = (id) => {
+  console.log(`id= ${id} `);
+  
+    if (!id)
       return;
   setIsDeleting(true);
 
-  fetch('http://localhost:3005/records/' + idRec, {
+  fetch('http://localhost:3005/records/' + id, {
       method: 'DELETE',
   })
       .then((rawResponse) => rawResponse.json())
@@ -90,7 +99,15 @@ const requestDeleteRecord = () => {
 };
 
     const requestSearchRecord = () => {
-      setStrSearch(prompt('Введите строку для поиска'));
+      for (let rec of records){
+        if (rec.title.indexOf(strSearch) >= 0) {
+          setIdRec(rec.id);
+          setTitle(rec.title);
+          break;
+        };  
+      }
+
+      
     }
 
     const requestSortRecords = () => {
@@ -109,28 +126,38 @@ const requestDeleteRecord = () => {
     
   return (
     <div className="App">
-      <div className="button-panel">
+      <div className='add-record'>
+        <input 
+          value={title}
+          onChange={event => setTitle(event.target.value)}
+          type="text" 
+          placeholder='Введите наименование дела' />
+
         <button
-                disabled={isCreating}
-                onClick={requestAddRecord}
+          disabled={isCreating}
+          onClick={requestAddRecord}
             >Добавить
-        </button>
+        </button>  
+      </div>  
+
+      <div className="button-panel">
+        <input 
+          value={strSearch}
+          onChange={event => setStrSearch(event.target.value)}
+          type="text" 
+          placeholder='Найти ...' />
+
+        <button 
+          onClick={requestSearchRecord}>
+                  Поиск
+        </button>  
 
         <button
                 disabled={isUpdating}
                 onClick={requestUpdateRecord}
             >Изменить
         </button>
-
-        <button 
-          disabled={isDeleting} 
-          onClick={requestDeleteRecord}>
-                  Удалить
-        </button>
-        <button 
-          onClick={requestSearchRecord}>
-                  Поиск
-        </button>      
+            
         <button 
           onClick={requestSortRecords}>
                   Сортировка
@@ -156,6 +183,11 @@ const requestDeleteRecord = () => {
                       <td>{id}</td>  
                       <td>{title}</td>     
                       <td>{String(completed)}</td>
+                      <button 
+                        disabled={isDeleting} 
+                        onClick={() => {requestDeleteRecord(id)}}>
+                                Удалить
+                      </button>
                     </tr>
     
                   ))
