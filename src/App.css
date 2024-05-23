@@ -17,7 +17,7 @@
 
 .table-panel {
   display: block;
-  width: 50%;
+  width: 30%;
   height: 800px;
   /* border: 1px solid black; */
   margin: auto;
@@ -29,8 +29,8 @@ table {
 th, td {
   padding: 7px 10px 10px 10px;
 }
-td:first-child {
-  width: 100px;
+td {
+  width: 100%;
 }
 td:last-child {
   width: 100px;
