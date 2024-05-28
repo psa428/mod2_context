@@ -7,7 +7,7 @@ import { useState } from "react";
     
 
     const requestUpdateRecord = (id, title, stat) => {
-        // console.log(`requestUpdateRecord id= ${id}`);
+         console.log(`requestUpdateRecord id= ${id}`);
         if (!id)
           return;
         // console.log(`requestUpdateRecord title = ${title}  stat = ${stat}`)    ;

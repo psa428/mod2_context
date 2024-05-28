@@ -1,9 +1,33 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
-import { Outlet } from "react-router-dom";
+// import { Outlet } from "react-router-dom";
+import { useRequestGetRecords } from "../hooks";
+import { useRequestAddRecord } from "../hooks";
 
-export function MainPage (props){
+export function MainPage (){
+
+    const refreshRec = () => setRefreshRecords(!refreshRecords);
+
+    const [title, setTitle] = useState("");
+    const [refreshRecords, setRefreshRecords] = useState(false);
+    const { isLoading, records, setRecords } = useRequestGetRecords(refreshRecords);
+    const { isCreating, requestAddRecord } = useRequestAddRecord(refreshRec, title);
     const [strSearch, setStrSearch] = useState('');
+
+    const requestSortRecords = () => {
+      let arr = [...records];
+      arr.sort(function(a, b) {
+        if (a.title < b.title)
+          return -1;
+        if (a.title > b.title)
+          return 1;
+        return 0;
+      });
+      
+      setRecords(arr);
+
+    };
+
     return (
         <div className="App">
     <input 
@@ -13,26 +37,27 @@ export function MainPage (props){
           placeholder='Найти ...' />
       <div className='add-record'>
         <input 
-          value={props.title}
-          onChange={event => props.setTitle(event.target.value)}
+          value={title}
+          onChange={event => setTitle(event.target.value)}
           type="text" 
           placeholder='Введите наименование дела' />
 
         <button
-          disabled={props.isCreating}
-          onClick={props.requestAddRecord}
+          disabled={isCreating}
+          onClick={requestAddRecord}
             >Добавить
         </button>  
       </div>  
 
       <div className="button-panel">     
         <button 
-          onClick={props.requestSortRecords}>
+          onClick={requestSortRecords}>
                   Сортировка
         </button>   
       </div>    
-      <Outlet />  
+      
         <h1>To Do List</h1>
+        
       <div className='table-panel' >
           <table>
             <tr>
@@ -42,14 +67,16 @@ export function MainPage (props){
                 {/* <th scope='col'>Completed</th> */}
             </tr>
         
-          {props.isLoading ? (
-                  <div className="loader"></div>
+          {isLoading ? (
+                  <div className="loader">Load...</div>
               ) : (
                 
-                  props.records.map(({ id, title, completed }) => (
+                  records.map(({ id, title, completed }) => (
                     
-                    <tr style= {title.indexOf(strSearch) >= 0 && strSearch !== '' ? {color: "green"} : {color: "black"}}>                    
-                      <td><Link to={`edit/${id}`}>{title}</Link></td>      
+                    <tr style= {title.indexOf(strSearch) >= 0 && strSearch !== '' ? {backgroundColor: "yellow"} : {backgroundColor: "#efefef"}}>                    
+                         
+                      <td><Link to={`edit/${id}`}>{title}</Link></td>  
+                      
                     </tr>   
                   ))
               )}
