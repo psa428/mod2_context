@@ -4,6 +4,7 @@ export const useRequestAddRecord = (refreshRec, title) => {
     const [isCreating, setIsCreating] = useState(false);
 
     const requestAddRecord = () => {
+        // console.log(`requestAddRecord title = ${title}`);
         let  newRecord = title;
         if (!newRecord) 
           return;

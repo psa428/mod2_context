@@ -1,26 +1,29 @@
 import { useRequestUpdateRecord } from "../hooks";
+import { useContext } from "react";
+import { AppContext } from "../context";
 
 export function UpdateRecord(props) {
+    const {refreshRec, isUpdating, setIsUpdating, title, setTitle, stat, setStat} = useContext(AppContext);
 
-    const { requestUpdateRecord } = useRequestUpdateRecord(props.refreshRec, props.isUpdating, props.setIsUpdating);
+    const { requestUpdateRecord } = useRequestUpdateRecord(refreshRec, isUpdating, setIsUpdating);
 
     return (
-        <div className='update-record' hidden={!props.isUpdating}>
+        <div className='update-record' hidden={!isUpdating}>
             <input 
-            value={props.title}
-            onChange={event => props.setTitle(event.target.value)}
+            value={title}
+            onChange={event => setTitle(event.target.value)}
             type="text" 
             />
 
             <input 
-            value={props.stat}
-            onChange={event => props.setStat(event.target.value)}
+            value={stat}
+            onChange={event => setStat(event.target.value)}
             type="text" 
             />  
 
             <button
             //   disabled={props.isCreating}
-            onClick={() => {requestUpdateRecord(props.idRec, props.title, props.stat)}}
+            onClick={() => {requestUpdateRecord(props.idRec, title, stat)}}
                 >Сохранить
             </button>  
         </div>

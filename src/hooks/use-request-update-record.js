@@ -7,7 +7,7 @@
     
 
     const requestUpdateRecord = (id, title, stat) => {
-         console.log(`requestUpdateRecord id= ${id}`);
+         
         if (!id)
           return;
         // console.log(`requestUpdateRecord title = ${title}  stat = ${stat}`)    ;

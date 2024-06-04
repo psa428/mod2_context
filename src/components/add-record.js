@@ -1,11 +1,15 @@
+import { useContext } from "react";
 import { useRequestAddRecord } from "../hooks"; 
-export function AddRecord(props) {
-    const { isCreating, requestAddRecord } = useRequestAddRecord(props.refreshRec, props.title);
+import { AppContext } from "../context";
+
+export function AddRecord() {
+    const { refreshRec, title, setTitle} = useContext(AppContext);
+    const { isCreating, requestAddRecord } = useRequestAddRecord(refreshRec, title);
     return (
         <div className='add-record'>
         <input 
-          value={props.title}
-          onChange={event => props.setTitle(event.target.value)}
+          value={title}
+          onChange={event => setTitle(event.target.value)}
           type="text" 
           placeholder='Введите наименование дела' />
 

@@ -1,27 +1,26 @@
 import { useState } from "react";
+import { useContext } from 'react';
+import { AppContext } from "../context";
 
 import { useRequestGetRecords } from "../hooks";
 import { useRequestDeleteRecord } from "../hooks";
-// import { useRequestUpdateRecord } from "../hooks";
-// import { useRequestAddRecord } from "../hooks";
+
 import { Search } from "./search";
 import { AddRecord } from "./add-record";
 import { UpdateRecord } from "./update-record";
 
 export function MainPage (){
 
-    const refreshRec = () => setRefreshRecords(!refreshRecords);
+  const { refreshRecords, refreshRec, title, setTitle, isUpdating, setIsUpdating, setStat } = useContext(AppContext);
 
-    const [title, setTitle] = useState("");
-    const [refreshRecords, setRefreshRecords] = useState(false);
+    
     const { isLoading, records, setRecords } = useRequestGetRecords(refreshRecords);
     const { isDeleting, requestDeleteRecord} = useRequestDeleteRecord(refreshRec);
-    // const {isUpdating, requestUpdateRecord, setIsUpdating} = useRequestUpdateRecord(refreshRec);
-    // const [isCreating, setIsCreating] = useState(false);
-    const [ isUpdating, setIsUpdating] = useState(false);
+    
+    
     
     const [strSearch, setStrSearch] = useState('');
-    const [stat, setStat] = useState(false) ;
+    
     const [idRec, setIdRec] = useState('');
 
     const requestSortRecords = () => {
@@ -41,7 +40,7 @@ export function MainPage (){
     return (
         <div className="App">
           <Search strSearch={strSearch} setStrSearch={setStrSearch}/>
-          <AddRecord title={title} setTitle={setTitle} refreshRec={refreshRec}/>
+          <AddRecord />
 
       <div className="button-panel">     
         <button 
@@ -49,7 +48,7 @@ export function MainPage (){
                   Сортировка
         </button>   
       </div>  
-        <UpdateRecord refreshRec={refreshRec} title={title} setTitle={setTitle} stat={stat} setStat={setStat} idRec={idRec} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
+        <UpdateRecord idRec={idRec}  />
 
         <h1>To Do List</h1>
         
