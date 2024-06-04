@@ -24,7 +24,13 @@ export const useRequestAddRecord = (refreshRec, title) => {
                 // setRefreshRecords(!refreshRecords);
                 refreshRec();
             })
-            .finally(() => setIsCreating(false));
+            .finally(() => {
+                setIsCreating(false);
+               
+            }    
+            );
+            
+            ;
     };
 
     return {

@@ -1,9 +1,9 @@
-import { useState } from "react";
+
 
 // export const useRequestUpdateRecord = (refreshRec, title, stat) => {
-    export const useRequestUpdateRecord = (refreshRec) => {
+    export const useRequestUpdateRecord = (refreshRec, isUpdating, setIsUpdating) => {
 
-    const [isUpdating, setIsUpdating] = useState(false);
+    
     
 
     const requestUpdateRecord = (id, title, stat) => {
@@ -38,9 +38,9 @@ import { useState } from "react";
     };
 
     return {
-        isUpdating,
-        requestUpdateRecord
-
+        
+        requestUpdateRecord,
+        
     }
 
 

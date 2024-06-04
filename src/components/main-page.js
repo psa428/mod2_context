@@ -1,8 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
-// import { Outlet } from "react-router-dom";
+
 import { useRequestGetRecords } from "../hooks";
-import { useRequestAddRecord } from "../hooks";
+import { useRequestDeleteRecord } from "../hooks";
+// import { useRequestUpdateRecord } from "../hooks";
+// import { useRequestAddRecord } from "../hooks";
+import { Search } from "./search";
+import { AddRecord } from "./add-record";
+import { UpdateRecord } from "./update-record";
 
 export function MainPage (){
 
@@ -11,8 +15,14 @@ export function MainPage (){
     const [title, setTitle] = useState("");
     const [refreshRecords, setRefreshRecords] = useState(false);
     const { isLoading, records, setRecords } = useRequestGetRecords(refreshRecords);
-    const { isCreating, requestAddRecord } = useRequestAddRecord(refreshRec, title);
+    const { isDeleting, requestDeleteRecord} = useRequestDeleteRecord(refreshRec);
+    // const {isUpdating, requestUpdateRecord, setIsUpdating} = useRequestUpdateRecord(refreshRec);
+    // const [isCreating, setIsCreating] = useState(false);
+    const [ isUpdating, setIsUpdating] = useState(false);
+    
     const [strSearch, setStrSearch] = useState('');
+    const [stat, setStat] = useState(false) ;
+    const [idRec, setIdRec] = useState('');
 
     const requestSortRecords = () => {
       let arr = [...records];
@@ -30,32 +40,17 @@ export function MainPage (){
 
     return (
         <div className="App">
-    <input 
-          value={strSearch}
-          onChange={event => setStrSearch(event.target.value)}
-          type="text" 
-          placeholder='Найти ...' />
-      <div className='add-record'>
-        <input 
-          value={title}
-          onChange={event => setTitle(event.target.value)}
-          type="text" 
-          placeholder='Введите наименование дела' />
-
-        <button
-          disabled={isCreating}
-          onClick={requestAddRecord}
-            >Добавить
-        </button>  
-      </div>  
+          <Search strSearch={strSearch} setStrSearch={setStrSearch}/>
+          <AddRecord title={title} setTitle={setTitle} refreshRec={refreshRec}/>
 
       <div className="button-panel">     
         <button 
           onClick={requestSortRecords}>
                   Сортировка
         </button>   
-      </div>    
-      
+      </div>  
+        <UpdateRecord refreshRec={refreshRec} title={title} setTitle={setTitle} stat={stat} setStat={setStat} idRec={idRec} isUpdating={isUpdating} setIsUpdating={setIsUpdating} />
+
         <h1>To Do List</h1>
         
       <div className='table-panel' >
@@ -75,7 +70,24 @@ export function MainPage (){
                     
                     <tr style= {title.indexOf(strSearch) >= 0 && strSearch !== '' ? {backgroundColor: "yellow"} : {backgroundColor: "#efefef"}}>                    
                          
-                      <td><Link to={`edit/${id}`}>{title}</Link></td>  
+                      <td>{title}</td>  
+                      <button 
+                        disabled={isDeleting} 
+                        onClick={() => {requestDeleteRecord(id)}}>
+                                Удалить
+                      </button>
+                      <button
+                        disabled={isUpdating}
+                         onClick={() => {
+                            setIsUpdating(true)
+                            setIdRec(id);
+                            setTitle(title);
+                            setStat(completed);
+                        }  
+                        }   
+                        >
+                        Изменить
+                      </button>
                       
                     </tr>   
                   ))

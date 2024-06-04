@@ -16,14 +16,19 @@
       "id": "3333"
     },
     {
-      "title": "Drink again",
-      "completed": false,
+      "title": "Drink cap of coffe",
+      "completed": "true",
       "id": "ec30"
     },
     {
       "title": "1212121212121212121212121213434343434343434343433434343212121212121212121212121212121212121212121212",
       "completed": false,
       "id": "fe4e"
+    },
+    {
+      "title": "Drink",
+      "completed": false,
+      "id": "890c"
     }
   ]
 }
